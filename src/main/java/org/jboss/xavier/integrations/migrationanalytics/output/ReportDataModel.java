@@ -1,4 +1,4 @@
-package io.fabric8.quickstarts.camel.drools.model.migrationanalytics.output;
+package org.jboss.xavier.integrations.migrationanalytics.output;
 
 @javax.persistence.Entity
 public class ReportDataModel implements java.io.Serializable {

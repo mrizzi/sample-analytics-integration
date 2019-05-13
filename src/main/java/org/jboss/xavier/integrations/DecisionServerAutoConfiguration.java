@@ -13,12 +13,11 @@
  *  implied.  See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-package io.fabric8.quickstarts.camel.drools;
+package org.jboss.xavier.integrations;
 
 import com.thoughtworks.xstream.XStream;
-import io.fabric8.quickstarts.camel.drools.model.migrationanalytics.input.InputDataModel;
-import io.fabric8.quickstarts.camel.drools.model.Person;
-import io.fabric8.quickstarts.camel.drools.model.migrationanalytics.output.ReportDataModel;
+import org.jboss.xavier.integrations.migrationanalytics.input.InputDataModel;
+import org.jboss.xavier.integrations.migrationanalytics.output.ReportDataModel;
 import org.apache.camel.dataformat.xstream.XStreamDataFormat;
 import org.apache.camel.spi.DataFormatFactory;
 import org.kie.internal.runtime.helper.BatchExecutionHelper;
@@ -29,7 +28,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DecisionServerAutoConfiguration {
 
-    private static final String HELLO_RULES_PACKAGE_NAME = "org.openshift.quickstarts.decisionserver.hellorules";
     private static final String MIGRATION_ANALYTICS_INPUT_MODELS_PACKAGE_NAME = "com.myspace.sample_analytics.pojo.input";
     private static final String MIGRATION_ANALYTICS_OUTPUT_MODELS_PACKAGE_NAME = "com.myspace.sample_analytics.pojo.output";
 
@@ -41,7 +39,6 @@ public class DecisionServerAutoConfiguration {
     public XStreamDataFormat xStreamDataFormat() {
         XStream xstream = BatchExecutionHelper.newXStreamMarshaller();
         // Use the "model" package instead of the one used on the kie server
-        xstream.aliasPackage(HELLO_RULES_PACKAGE_NAME, Person.class.getPackage().getName());
         xstream.aliasPackage(MIGRATION_ANALYTICS_INPUT_MODELS_PACKAGE_NAME, InputDataModel.class.getPackage().getName());
         xstream.aliasPackage(MIGRATION_ANALYTICS_OUTPUT_MODELS_PACKAGE_NAME, ReportDataModel.class.getPackage().getName());
         xstream.alias("response", org.kie.server.api.model.ServiceResponse.class);

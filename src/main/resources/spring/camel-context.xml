@@ -29,7 +29,7 @@
             <get uri="/">
                 <description>Get the list of all the reports</description>
                 <route id="reports-get-all">
-                    <bean beanType="io.fabric8.quickstarts.camel.drools.jpa.service.ReportService" method="findReports" />
+                    <bean beanType="org.jboss.xavier.integrations.jpa.service.ReportService" method="findReports" />
                 </route>
             </get>
         </rest>
@@ -50,7 +50,7 @@
             <to uri="direct:decisionserver"/>
             <bean id="route-extract-reports" method="extractReports" ref="decisionServerHelper"/>
             <log id="route-log-totalPrice" message="totalPrice = ${body.totalPrice}"/>
-            <to uri="jpa:io.fabric8.quickstarts.camel.drools.model.migrationanalytics.output.ReportDataModel" />
+            <to uri="jpa:org.jboss.xavier.integrations.migrationanalytics.output.ReportDataModel" />
         </route>
 
         <!--

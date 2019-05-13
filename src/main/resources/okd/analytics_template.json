@@ -14,13 +14,18 @@
                 "generation": 2,
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "amq-broker-72-basic",
-                    "application": "broker",
-                    "template": "amq-broker-72-basic",
+                    "app": "amq-broker",
+                    "application": "migration-analytics",
+                    "template": "amq-broker-73-basic",
                     "xpaas": "1.4.16"
                 }
             },
             "spec": {
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "deploymentConfig": "broker-amq"
+                },
                 "strategy": {
                     "type": "Rolling",
                     "rollingParams": {
@@ -35,36 +40,15 @@
                 },
                 "triggers": [
                     {
-                        "type": "ImageChange",
-                        "imageChangeParams": {
-                            "automatic": true,
-                            "containerNames": [
-                                "broker-amq"
-                            ],
-                            "from": {
-                                "kind": "ImageStreamTag",
-                                "namespace": "openshift",
-                                "name": "amq-broker-72-openshift:1.2"
-                            },
-                            "lastTriggeredImage": "registry.access.redhat.com/amq-broker-7/amq-broker-72-openshift@sha256:810c5cb9315c31948c10886e4a65ec1d952b64b30ac0a1833bb7df9c29864ace"
-                        }
-                    },
-                    {
                         "type": "ConfigChange"
                     }
                 ],
-                "replicas": 1,
-                "revisionHistoryLimit": 10,
                 "test": false,
-                "selector": {
-                    "deploymentConfig": "broker-amq"
-                },
                 "template": {
                     "metadata": {
                         "name": "broker-amq",
-                        "creationTimestamp": null,
                         "labels": {
-                            "application": "broker",
+                            "application": "migration-analytics",
                             "deploymentConfig": "broker-amq"
                         }
                     },
@@ -72,7 +56,7 @@
                         "containers": [
                             {
                                 "name": "broker-amq",
-                                "image": "registry.access.redhat.com/amq-broker-7/amq-broker-72-openshift@sha256:810c5cb9315c31948c10886e4a65ec1d952b64b30ac0a1833bb7df9c29864ace",
+                                "image": "registry.redhat.io/amq-broker-7/amq-broker-73-openshift:7.3",
                                 "ports": [
                                     {
                                         "name": "console-jolokia",
@@ -184,14 +168,14 @@
             "kind": "DeploymentConfig",
             "apiVersion": "apps.openshift.io/v1",
             "metadata": {
-                "name": "myapp-kieserver",
+                "name": "analytics-kieserver",
                 "generation": 2,
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
-                    "service": "myapp-kieserver",
+                    "service": "analytics-kieserver",
                     "template": "rhdm73-authoring"
                 },
                 "annotations": {
@@ -213,7 +197,7 @@
                         "imageChangeParams": {
                             "automatic": true,
                             "containerNames": [
-                                "myapp-kieserver"
+                                "analytics-kieserver"
                             ],
                             "from": {
                                 "kind": "ImageStreamTag",
@@ -231,16 +215,16 @@
                 "revisionHistoryLimit": 10,
                 "test": false,
                 "selector": {
-                    "deploymentConfig": "myapp-kieserver"
+                    "deploymentConfig": "analytics-kieserver"
                 },
                 "template": {
                     "metadata": {
-                        "name": "myapp-kieserver",
+                        "name": "analytics-kieserver",
                         "creationTimestamp": null,
                         "labels": {
-                            "application": "myapp",
-                            "deploymentConfig": "myapp-kieserver",
-                            "service": "myapp-kieserver"
+                            "application": "migration-analytics",
+                            "deploymentConfig": "analytics-kieserver",
+                            "service": "analytics-kieserver"
                         }
                     },
                     "spec": {
@@ -255,7 +239,7 @@
                         ],
                         "containers": [
                             {
-                                "name": "myapp-kieserver",
+                                "name": "analytics-kieserver",
                                 "image": "172.30.1.1:5000/openshift/rhdm73-kieserver-openshift@sha256:0db3dd7fad9bdd144c758482d59c55a19867bbb9429fee58ed8bdf11f3f2f0b0",
                                 "ports": [
                                     {
@@ -281,7 +265,7 @@
                                     },
                                     {
                                         "name": "KIE_ADMIN_PWD",
-                                        "value": "password"
+                                        "value": "SxNhwF2!"
                                     },
                                     {
                                         "name": "KIE_SERVER_MODE",
@@ -305,14 +289,14 @@
                                     },
                                     {
                                         "name": "KIE_SERVER_CONTROLLER_PWD",
-                                        "value": "password"
+                                        "value": "AYdlha0!"
                                     },
                                     {
                                         "name": "KIE_SERVER_CONTROLLER_TOKEN"
                                     },
                                     {
                                         "name": "KIE_SERVER_CONTROLLER_SERVICE",
-                                        "value": "myapp-rhdmcentr"
+                                        "value": "analytics-rhdmcentr"
                                     },
                                     {
                                         "name": "KIE_SERVER_CONTROLLER_PROTOCOL",
@@ -320,11 +304,11 @@
                                     },
                                     {
                                         "name": "KIE_SERVER_ID",
-                                        "value": "myapp-kieserver"
+                                        "value": "analytics-kieserver"
                                     },
                                     {
                                         "name": "KIE_SERVER_ROUTE_NAME",
-                                        "value": "myapp-kieserver"
+                                        "value": "analytics-kieserver"
                                     },
                                     {
                                         "name": "KIE_SERVER_USE_SECURE_ROUTE_NAME",
@@ -347,7 +331,7 @@
                                     },
                                     {
                                         "name": "RHDMCENTR_MAVEN_REPO_SERVICE",
-                                        "value": "myapp-rhdmcentr"
+                                        "value": "analytics-rhdmcentr"
                                     },
                                     {
                                         "name": "RHDMCENTR_MAVEN_REPO_PATH",
@@ -563,14 +547,14 @@
             "kind": "DeploymentConfig",
             "apiVersion": "apps.openshift.io/v1",
             "metadata": {
-                "name": "myapp-rhdmcentr",
+                "name": "analytics-rhdmcentr",
                 "generation": 2,
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
-                    "service": "myapp-rhdmcentr",
+                    "service": "analytics-rhdmcentr",
                     "template": "rhdm73-authoring"
                 },
                 "annotations": {
@@ -592,7 +576,7 @@
                         "imageChangeParams": {
                             "automatic": true,
                             "containerNames": [
-                                "myapp-rhdmcentr"
+                                "analytics-rhdmcentr"
                             ],
                             "from": {
                                 "kind": "ImageStreamTag",
@@ -610,16 +594,16 @@
                 "revisionHistoryLimit": 10,
                 "test": false,
                 "selector": {
-                    "deploymentConfig": "myapp-rhdmcentr"
+                    "deploymentConfig": "analytics-rhdmcentr"
                 },
                 "template": {
                     "metadata": {
-                        "name": "myapp-rhdmcentr",
+                        "name": "analytics-rhdmcentr",
                         "creationTimestamp": null,
                         "labels": {
-                            "application": "myapp",
-                            "deploymentConfig": "myapp-rhdmcentr",
-                            "service": "myapp-rhdmcentr"
+                            "application": "migration-analytics",
+                            "deploymentConfig": "analytics-rhdmcentr",
+                            "service": "analytics-rhdmcentr"
                         }
                     },
                     "spec": {
@@ -632,15 +616,15 @@
                                 }
                             },
                             {
-                                "name": "myapp-rhdmcentr-pvol",
+                                "name": "analytics-rhdmcentr-pvol",
                                 "persistentVolumeClaim": {
-                                    "claimName": "myapp-rhdmcentr-claim"
+                                    "claimName": "analytics-rhdmcentr-claim"
                                 }
                             }
                         ],
                         "containers": [
                             {
-                                "name": "myapp-rhdmcentr",
+                                "name": "analytics-rhdmcentr",
                                 "image": "172.30.1.1:5000/openshift/rhdm73-decisioncentral-openshift@sha256:f7b7bf8cb010e8d5e2222c8c099124b5fa08955985722c5dd89d806933c08b5c",
                                 "ports": [
                                     {
@@ -698,7 +682,7 @@
                                     },
                                     {
                                         "name": "WORKBENCH_ROUTE_NAME",
-                                        "value": "myapp-rhdmcentr"
+                                        "value": "analytics-rhdmcentr"
                                     },
                                     {
                                         "name": "MAVEN_MIRROR_URL"
@@ -860,7 +844,7 @@
                                         "mountPath": "/etc/decisioncentral-secret-volume"
                                     },
                                     {
-                                        "name": "myapp-rhdmcentr-pvol",
+                                        "name": "analytics-rhdmcentr-pvol",
                                         "mountPath": "/opt/eap/standalone/data/kie"
                                     }
                                 ],
@@ -925,6 +909,7 @@
                 "creationTimestamp": null,
                 "labels": {
                     "app": "mysql-persistent",
+                    "application": "migration-analytics",
                     "template": "mysql-persistent-template"
                 },
                 "annotations": {
@@ -1092,15 +1077,15 @@
             "kind": "DeploymentConfig",
             "apiVersion": "apps.openshift.io/v1",
             "metadata": {
-                "name": "s2i-fuse73-spring-boot-camel-drools",
+                "name": "analytics-integration",
                 "generation": 63,
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "s2i-fuse73-spring-boot-camel-drools",
-                    "component": "s2i-fuse73-spring-boot-camel-drools",
-                    "group": "quickstarts",
+                    "app": "analytics-integration",
+                    "application": "migration-analytics",
+                    "component": "analytics-integration",
                     "provider": "s2i",
-                    "template": "s2i-fuse73-spring-boot-camel-drools",
+                    "template": "analytics-integration",
                     "version": "1.0.0.fuse-730046-redhat-00002"
                 }
             },
@@ -1126,14 +1111,12 @@
                         "imageChangeParams": {
                             "automatic": true,
                             "containerNames": [
-                                "s2i-fuse73-spring-boot-camel-drools"
+                                "analytics-integration"
                             ],
                             "from": {
                                 "kind": "ImageStreamTag",
-                                "namespace": "rhdm73-authoring",
-                                "name": "s2i-fuse73-spring-boot-camel-drools:latest"
-                            },
-                            "lastTriggeredImage": "172.30.1.1:5000/rhdm73-authoring/s2i-fuse73-spring-boot-camel-drools@sha256:1b6b39d3680de7f4a8897da7a64554a5d6e37f666e8b746177d167119e8a1365"
+                                "name": "analytics-integration:latest"
+                            }
                         }
                     }
                 ],
@@ -1141,10 +1124,9 @@
                 "revisionHistoryLimit": 10,
                 "test": false,
                 "selector": {
-                    "app": "s2i-fuse73-spring-boot-camel-drools",
-                    "component": "s2i-fuse73-spring-boot-camel-drools",
-                    "deploymentconfig": "s2i-fuse73-spring-boot-camel-drools",
-                    "group": "quickstarts",
+                    "app": "analytics-integration",
+                    "component": "analytics-integration",
+                    "deploymentconfig": "analytics-integration",
                     "provider": "s2i",
                     "version": "1.0.0.fuse-730046-redhat-00002"
                 },
@@ -1152,10 +1134,9 @@
                     "metadata": {
                         "creationTimestamp": null,
                         "labels": {
-                            "app": "s2i-fuse73-spring-boot-camel-drools",
-                            "component": "s2i-fuse73-spring-boot-camel-drools",
-                            "deploymentconfig": "s2i-fuse73-spring-boot-camel-drools",
-                            "group": "quickstarts",
+                            "app": "analytics-integration",
+                            "component": "analytics-integration",
+                            "deploymentconfig": "analytics-integration",
                             "provider": "s2i",
                             "version": "1.0.0.fuse-730046-redhat-00002"
                         }
@@ -1163,8 +1144,8 @@
                     "spec": {
                         "containers": [
                             {
-                                "name": "s2i-fuse73-spring-boot-camel-drools",
-                                "image": "172.30.1.1:5000/rhdm73-authoring/s2i-fuse73-spring-boot-camel-drools@sha256:1b6b39d3680de7f4a8897da7a64554a5d6e37f666e8b746177d167119e8a1365",
+                                "name": "analytics-integration",
+                                "image": "library/analytics-integration:latest",
                                 "ports": [
                                     {
                                         "name": "jolokia",
@@ -1189,7 +1170,7 @@
                                     },
                                     {
                                         "name": "KIESERVER_SERVICE",
-                                        "value": "myapp-kieserver"
+                                        "value": "analytics-kieserver"
                                     },
                                     {
                                         "name": "KIESERVER_USERNAME",
@@ -1202,10 +1183,6 @@
                                     {
                                         "name": "KIESERVER_PATH",
                                         "value": "services/rest/server/containers/instances/${kieserver.container}"
-                                    },
-                                    {
-                                        "name": "KIESERVER_CONTAINER_OLD",
-                                        "value": "hello-rule_1.0.0-SNAPSHOT"
                                     },
                                     {
                                         "name": "KIESERVER_CONTAINER",
@@ -1230,20 +1207,8 @@
                                         }
                                     },
                                     {
-                                        "name": "AMQP_SERVICE_NAME",
-                                        "value": "messaging-lwfygbvb1b.rhdm73-authoring.svc"
-                                    },
-                                    {
-                                        "name": "AMQP_USERNAME",
-                                        "value": "user1"
-                                    },
-                                    {
-                                        "name": "AMQP_PASSWORD",
-                                        "value": "password"
-                                    },
-                                    {
-                                        "name": "AMQP_PARAMETERS",
-                                        "value": "transport.trustAll=true\u0026transport.verifyHost=false\u0026amqp.idleTimeout=120000"
+                                        "name": "AMQ_SERVER",
+                                        "value": "broker-amq-tcp"
                                     }
                                 ],
                                 "resources": {
@@ -1306,12 +1271,12 @@
             "kind": "Route",
             "apiVersion": "route.openshift.io/v1",
             "metadata": {
-                "name": "console",
+                "name": "amq-console",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "amq-broker-72-basic",
-                    "application": "broker",
-                    "template": "amq-broker-72-basic",
+                    "app": "amq-broker",
+                    "application": "migration-analytics",
+                    "template": "amq-broker-73-basic",
                     "xpaas": "1.4.16"
                 },
                 "annotations": {
@@ -1319,188 +1284,26 @@
                 }
             },
             "spec": {
-                "host": "console-rhdm73-authoring.127.0.0.1.nip.io",
+                "host": "",
                 "to": {
                     "kind": "Service",
                     "name": "broker-amq-jolokia",
                     "weight": 100
                 },
                 "wildcardPolicy": "None"
-            },
-            "status": {
-                "ingress": [
-                    {
-                        "host": "console-rhdm73-authoring.127.0.0.1.nip.io",
-                        "routerName": "router",
-                        "conditions": [
-                            {
-                                "type": "Admitted",
-                                "status": "True",
-                                "lastTransitionTime": "2019-05-08T16:23:16Z"
-                            }
-                        ],
-                        "wildcardPolicy": "None"
-                    }
-                ]
             }
         },
         {
             "kind": "Route",
             "apiVersion": "route.openshift.io/v1",
             "metadata": {
-                "name": "console-lwfygbvb1b",
+                "name": "analytics-kieserver",
                 "creationTimestamp": null,
                 "labels": {
-                    "infraType": "standard",
-                    "infraUuid": "lwfygbvb1b"
-                },
-                "annotations": {
-                    "addressSpace": "myspace",
-                    "enmasse.io/service-name": "console-lwfygbvb1b",
-                    "openshift.io/host.generated": "true"
-                }
-            },
-            "spec": {
-                "host": "console-lwfygbvb1b-rhdm73-authoring.127.0.0.1.nip.io",
-                "to": {
-                    "kind": "Service",
-                    "name": "console-lwfygbvb1b",
-                    "weight": 100
-                },
-                "port": {
-                    "targetPort": "https"
-                },
-                "tls": {
-                    "termination": "reencrypt",
-                    "destinationCACertificate": "-----BEGIN CERTIFICATE-----\nMIIDVzCCAj+gAwIBAgIJAIq+dS6TP4D2MA0GCSqGSIb3DQEBCwUAMEIxCzAJBgNV\nBAYTAlhYMRUwEwYDVQQHDAxEZWZhdWx0IENpdHkxHDAaBgNVBAoME0RlZmF1bHQg\nQ29tcGFueSBMdGQwHhcNMTkwNTA4MTIxODUyWhcNNDkwNjE5MTIxODUyWjBCMQsw\nCQYDVQQGEwJYWDEVMBMGA1UEBwwMRGVmYXVsdCBDaXR5MRwwGgYDVQQKDBNEZWZh\ndWx0IENvbXBhbnkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA\nwC/ER1zKoBMhGEgbyNhrwWM+MAuLBMPHA26d9iWP5WnfVXX/JRoCT7sz5TlwhWLg\n6stgCGsLEgxAbnCPYB4jVbIHexxK4FthW+b3PHysGDOrmkYpK0cZISnljvx0uDwQ\nR/OO+P8XvxHPuwsBu08zLA/dbDCVQwgYbNbuaTa3M79qOM9yScHLSkMAnlLPZbZz\nShClVdcXlsdwvw5rnTBhoxirdaSV0QojbgdQa0cvB7l1l+wfbtCWGKjB8L2YUDpl\ncwxa4mri1eBw70BOcsf/oBcvAo0who7RGge6mzHLDoHVFr8dMgjUdzQFW+VnY6Qf\nZBLM+1UNu7rIUBrHY2U/PwIDAQABo1AwTjAdBgNVHQ4EFgQUxHYgVdoXNgqDd9EE\nJe0xtcMoICUwHwYDVR0jBBgwFoAUxHYgVdoXNgqDd9EEJe0xtcMoICUwDAYDVR0T\nBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEArn1tQDGTCZr0YSJ2i4jcZLRAugy+\nZcyyF/ljbbKhyyT1rKO2gDjNuIPM6dTcSG7iKn0RUCLn7CBTbIfHrhvBn/SC7cZC\nf2vpqcSxIr6Pu0w0PQa28SWNLuVxlqCtMPcGzW9/P44v0qguuAZuIXQCOXlpwKm0\nqGsdhoYv3unuutPMg3wQMubdEP4DIS2jN+3Gz+AnzuvkTo71B3whroRvT9mVZopa\nLxcoVKW/jjAPh16GGZ99E2mtuJjOHZcwdZNdZhbfyP+1vacUnSFZiA4FUnHBH2X/\nRpn27kX6AamKT5mT0Vyyl4VhFHTiHr3e+idjSRmv//JbFSwfBnkyOyoLXg==\n-----END CERTIFICATE-----\n"
-                },
-                "wildcardPolicy": "None"
-            },
-            "status": {
-                "ingress": [
-                    {
-                        "host": "console-lwfygbvb1b-rhdm73-authoring.127.0.0.1.nip.io",
-                        "routerName": "router",
-                        "conditions": [
-                            {
-                                "type": "Admitted",
-                                "status": "True",
-                                "lastTransitionTime": "2019-05-08T12:18:53Z"
-                            }
-                        ],
-                        "wildcardPolicy": "None"
-                    }
-                ]
-            }
-        },
-        {
-            "kind": "Route",
-            "apiVersion": "route.openshift.io/v1",
-            "metadata": {
-                "name": "messaging-lwfygbvb1b",
-                "creationTimestamp": null,
-                "labels": {
-                    "infraType": "standard",
-                    "infraUuid": "lwfygbvb1b"
-                },
-                "annotations": {
-                    "addressSpace": "myspace",
-                    "enmasse.io/service-name": "messaging-lwfygbvb1b",
-                    "openshift.io/host.generated": "true"
-                }
-            },
-            "spec": {
-                "host": "messaging-lwfygbvb1b-rhdm73-authoring.127.0.0.1.nip.io",
-                "to": {
-                    "kind": "Service",
-                    "name": "messaging-lwfygbvb1b",
-                    "weight": 100
-                },
-                "port": {
-                    "targetPort": "amqps"
-                },
-                "tls": {
-                    "termination": "passthrough"
-                },
-                "wildcardPolicy": "None"
-            },
-            "status": {
-                "ingress": [
-                    {
-                        "host": "messaging-lwfygbvb1b-rhdm73-authoring.127.0.0.1.nip.io",
-                        "routerName": "router",
-                        "conditions": [
-                            {
-                                "type": "Admitted",
-                                "status": "True",
-                                "lastTransitionTime": "2019-05-08T12:18:51Z"
-                            }
-                        ],
-                        "wildcardPolicy": "None"
-                    }
-                ]
-            }
-        },
-        {
-            "kind": "Route",
-            "apiVersion": "route.openshift.io/v1",
-            "metadata": {
-                "name": "messaging-wss-lwfygbvb1b",
-                "creationTimestamp": null,
-                "labels": {
-                    "infraType": "standard",
-                    "infraUuid": "lwfygbvb1b"
-                },
-                "annotations": {
-                    "addressSpace": "myspace",
-                    "enmasse.io/service-name": "messaging-lwfygbvb1b",
-                    "openshift.io/host.generated": "true"
-                }
-            },
-            "spec": {
-                "host": "messaging-wss-lwfygbvb1b-rhdm73-authoring.127.0.0.1.nip.io",
-                "to": {
-                    "kind": "Service",
-                    "name": "messaging-lwfygbvb1b",
-                    "weight": 100
-                },
-                "port": {
-                    "targetPort": "https"
-                },
-                "tls": {
-                    "termination": "reencrypt",
-                    "destinationCACertificate": "-----BEGIN CERTIFICATE-----\nMIIDVzCCAj+gAwIBAgIJAIq+dS6TP4D2MA0GCSqGSIb3DQEBCwUAMEIxCzAJBgNV\nBAYTAlhYMRUwEwYDVQQHDAxEZWZhdWx0IENpdHkxHDAaBgNVBAoME0RlZmF1bHQg\nQ29tcGFueSBMdGQwHhcNMTkwNTA4MTIxODUyWhcNNDkwNjE5MTIxODUyWjBCMQsw\nCQYDVQQGEwJYWDEVMBMGA1UEBwwMRGVmYXVsdCBDaXR5MRwwGgYDVQQKDBNEZWZh\ndWx0IENvbXBhbnkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA\nwC/ER1zKoBMhGEgbyNhrwWM+MAuLBMPHA26d9iWP5WnfVXX/JRoCT7sz5TlwhWLg\n6stgCGsLEgxAbnCPYB4jVbIHexxK4FthW+b3PHysGDOrmkYpK0cZISnljvx0uDwQ\nR/OO+P8XvxHPuwsBu08zLA/dbDCVQwgYbNbuaTa3M79qOM9yScHLSkMAnlLPZbZz\nShClVdcXlsdwvw5rnTBhoxirdaSV0QojbgdQa0cvB7l1l+wfbtCWGKjB8L2YUDpl\ncwxa4mri1eBw70BOcsf/oBcvAo0who7RGge6mzHLDoHVFr8dMgjUdzQFW+VnY6Qf\nZBLM+1UNu7rIUBrHY2U/PwIDAQABo1AwTjAdBgNVHQ4EFgQUxHYgVdoXNgqDd9EE\nJe0xtcMoICUwHwYDVR0jBBgwFoAUxHYgVdoXNgqDd9EEJe0xtcMoICUwDAYDVR0T\nBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEArn1tQDGTCZr0YSJ2i4jcZLRAugy+\nZcyyF/ljbbKhyyT1rKO2gDjNuIPM6dTcSG7iKn0RUCLn7CBTbIfHrhvBn/SC7cZC\nf2vpqcSxIr6Pu0w0PQa28SWNLuVxlqCtMPcGzW9/P44v0qguuAZuIXQCOXlpwKm0\nqGsdhoYv3unuutPMg3wQMubdEP4DIS2jN+3Gz+AnzuvkTo71B3whroRvT9mVZopa\nLxcoVKW/jjAPh16GGZ99E2mtuJjOHZcwdZNdZhbfyP+1vacUnSFZiA4FUnHBH2X/\nRpn27kX6AamKT5mT0Vyyl4VhFHTiHr3e+idjSRmv//JbFSwfBnkyOyoLXg==\n-----END CERTIFICATE-----\n"
-                },
-                "wildcardPolicy": "None"
-            },
-            "status": {
-                "ingress": [
-                    {
-                        "host": "messaging-wss-lwfygbvb1b-rhdm73-authoring.127.0.0.1.nip.io",
-                        "routerName": "router",
-                        "conditions": [
-                            {
-                                "type": "Admitted",
-                                "status": "True",
-                                "lastTransitionTime": "2019-05-08T12:18:53Z"
-                            }
-                        ],
-                        "wildcardPolicy": "None"
-                    }
-                ]
-            }
-        },
-        {
-            "kind": "Route",
-            "apiVersion": "route.openshift.io/v1",
-            "metadata": {
-                "name": "myapp-kieserver",
-                "creationTimestamp": null,
-                "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
-                    "service": "myapp-kieserver",
+                    "service": "analytics-kieserver",
                     "template": "rhdm73-authoring"
                 },
                 "annotations": {
@@ -1509,45 +1312,29 @@
                 }
             },
             "spec": {
-                "host": "myapp-kieserver-rhdm73-authoring.127.0.0.1.nip.io",
+                "host": "",
                 "to": {
                     "kind": "Service",
-                    "name": "myapp-kieserver",
+                    "name": "analytics-kieserver",
                     "weight": 100
                 },
                 "port": {
                     "targetPort": "http"
                 },
                 "wildcardPolicy": "None"
-            },
-            "status": {
-                "ingress": [
-                    {
-                        "host": "myapp-kieserver-rhdm73-authoring.127.0.0.1.nip.io",
-                        "routerName": "router",
-                        "conditions": [
-                            {
-                                "type": "Admitted",
-                                "status": "True",
-                                "lastTransitionTime": "2019-04-30T17:52:20Z"
-                            }
-                        ],
-                        "wildcardPolicy": "None"
-                    }
-                ]
             }
         },
         {
             "kind": "Route",
             "apiVersion": "route.openshift.io/v1",
             "metadata": {
-                "name": "myapp-rhdmcentr",
+                "name": "analytics-rhdmcentr",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
-                    "service": "myapp-rhdmcentr",
+                    "service": "analytics-rhdmcentr",
                     "template": "rhdm73-authoring"
                 },
                 "annotations": {
@@ -1557,88 +1344,56 @@
                 }
             },
             "spec": {
-                "host": "myapp-rhdmcentr-rhdm73-authoring.127.0.0.1.nip.io",
+                "host": "",
                 "to": {
                     "kind": "Service",
-                    "name": "myapp-rhdmcentr",
+                    "name": "analytics-rhdmcentr",
                     "weight": 100
                 },
                 "port": {
                     "targetPort": "http"
                 },
                 "wildcardPolicy": "None"
-            },
-            "status": {
-                "ingress": [
-                    {
-                        "host": "myapp-rhdmcentr-rhdm73-authoring.127.0.0.1.nip.io",
-                        "routerName": "router",
-                        "conditions": [
-                            {
-                                "type": "Admitted",
-                                "status": "True",
-                                "lastTransitionTime": "2019-04-30T17:52:20Z"
-                            }
-                        ],
-                        "wildcardPolicy": "None"
-                    }
-                ]
             }
         },
         {
             "kind": "Route",
             "apiVersion": "route.openshift.io/v1",
             "metadata": {
-                "name": "s2i-fuse73-spring-boot-camel-drools",
+                "name": "analytics-integration",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "s2i-fuse73-spring-boot-camel-drools-http",
-                    "application": "s2i-fuse73-spring-boot-camel-drools"
+                    "app": "analytics-integration-http",
+                    "application": "migration-analytics"
                 },
                 "annotations": {
                     "openshift.io/host.generated": "true"
                 }
             },
             "spec": {
-                "host": "s2i-fuse73-spring-boot-camel-drools-rhdm73-authoring.127.0.0.1.nip.io",
+                "host": "",
                 "to": {
                     "kind": "Service",
-                    "name": "s2i-fuse73-spring-boot-camel-drools",
+                    "name": "analytics-integration",
                     "weight": 100
                 },
                 "port": {
                     "targetPort": "http"
                 },
                 "wildcardPolicy": "None"
-            },
-            "status": {
-                "ingress": [
-                    {
-                        "host": "s2i-fuse73-spring-boot-camel-drools-rhdm73-authoring.127.0.0.1.nip.io",
-                        "routerName": "router",
-                        "conditions": [
-                            {
-                                "type": "Admitted",
-                                "status": "True",
-                                "lastTransitionTime": "2019-05-08T10:12:06Z"
-                            }
-                        ],
-                        "wildcardPolicy": "None"
-                    }
-                ]
             }
         },
         {
             "kind": "Route",
             "apiVersion": "route.openshift.io/v1",
             "metadata": {
-                "name": "secure-myapp-kieserver",
+                "name": "secure-analytics-kieserver",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
-                    "service": "myapp-kieserver",
+                    "service": "analytics-kieserver",
                     "template": "rhdm73-authoring"
                 },
                 "annotations": {
@@ -1647,10 +1402,10 @@
                 }
             },
             "spec": {
-                "host": "secure-myapp-kieserver-rhdm73-authoring.127.0.0.1.nip.io",
+                "host": "",
                 "to": {
                     "kind": "Service",
-                    "name": "myapp-kieserver",
+                    "name": "analytics-kieserver",
                     "weight": 100
                 },
                 "port": {
@@ -1660,35 +1415,19 @@
                     "termination": "passthrough"
                 },
                 "wildcardPolicy": "None"
-            },
-            "status": {
-                "ingress": [
-                    {
-                        "host": "secure-myapp-kieserver-rhdm73-authoring.127.0.0.1.nip.io",
-                        "routerName": "router",
-                        "conditions": [
-                            {
-                                "type": "Admitted",
-                                "status": "True",
-                                "lastTransitionTime": "2019-04-30T17:52:21Z"
-                            }
-                        ],
-                        "wildcardPolicy": "None"
-                    }
-                ]
             }
         },
         {
             "kind": "Route",
             "apiVersion": "route.openshift.io/v1",
             "metadata": {
-                "name": "secure-myapp-rhdmcentr",
+                "name": "secure-analytics-rhdmcentr",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
-                    "service": "myapp-rhdmcentr",
+                    "service": "analytics-rhdmcentr",
                     "template": "rhdm73-authoring"
                 },
                 "annotations": {
@@ -1698,10 +1437,10 @@
                 }
             },
             "spec": {
-                "host": "secure-myapp-rhdmcentr-rhdm73-authoring.127.0.0.1.nip.io",
+                "host": "",
                 "to": {
                     "kind": "Service",
-                    "name": "myapp-rhdmcentr",
+                    "name": "analytics-rhdmcentr",
                     "weight": 100
                 },
                 "port": {
@@ -1711,22 +1450,6 @@
                     "termination": "passthrough"
                 },
                 "wildcardPolicy": "None"
-            },
-            "status": {
-                "ingress": [
-                    {
-                        "host": "secure-myapp-rhdmcentr-rhdm73-authoring.127.0.0.1.nip.io",
-                        "routerName": "router",
-                        "conditions": [
-                            {
-                                "type": "Admitted",
-                                "status": "True",
-                                "lastTransitionTime": "2019-04-30T17:52:21Z"
-                            }
-                        ],
-                        "wildcardPolicy": "None"
-                    }
-                ]
             }
         },
         {
@@ -1736,9 +1459,9 @@
                 "name": "broker-amq-amqp",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "amq-broker-72-basic",
-                    "application": "broker",
-                    "template": "amq-broker-72-basic",
+                    "app": "amq-broker",
+                    "application": "migration-analytics",
+                    "template": "amq-broker-73-basic",
                     "xpaas": "1.4.16"
                 },
                 "annotations": {
@@ -1770,9 +1493,9 @@
                 "name": "broker-amq-jolokia",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "amq-broker-72-basic",
-                    "application": "broker",
-                    "template": "amq-broker-72-basic",
+                    "app": "amq-broker",
+                    "application": "migration-analytics",
+                    "template": "amq-broker-73-basic",
                     "xpaas": "1.4.16"
                 },
                 "annotations": {
@@ -1804,9 +1527,9 @@
                 "name": "broker-amq-mqtt",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "amq-broker-72-basic",
-                    "application": "broker",
-                    "template": "amq-broker-72-basic",
+                    "app": "amq-broker",
+                    "application": "migration-analytics",
+                    "template": "amq-broker-73-basic",
                     "xpaas": "1.4.16"
                 },
                 "annotations": {
@@ -1838,9 +1561,9 @@
                 "name": "broker-amq-stomp",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "amq-broker-72-basic",
-                    "application": "broker",
-                    "template": "amq-broker-72-basic",
+                    "app": "amq-broker",
+                    "application": "migration-analytics",
+                    "template": "amq-broker-73-basic",
                     "xpaas": "1.4.16"
                 },
                 "annotations": {
@@ -1872,9 +1595,9 @@
                 "name": "broker-amq-tcp",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "amq-broker-72-basic",
-                    "application": "broker",
-                    "template": "amq-broker-72-basic",
+                    "app": "amq-broker",
+                    "application": "migration-analytics",
+                    "template": "amq-broker-73-basic",
                     "xpaas": "1.4.16"
                 },
                 "annotations": {
@@ -1904,13 +1627,13 @@
             "kind": "Service",
             "apiVersion": "v1",
             "metadata": {
-                "name": "myapp-kieserver",
+                "name": "analytics-kieserver",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
-                    "service": "myapp-kieserver",
+                    "service": "analytics-kieserver",
                     "template": "rhdm73-authoring"
                 },
                 "annotations": {
@@ -1933,7 +1656,7 @@
                     }
                 ],
                 "selector": {
-                    "deploymentConfig": "myapp-kieserver"
+                    "deploymentConfig": "analytics-kieserver"
                 },
                 "type": "ClusterIP",
                 "sessionAffinity": "None"
@@ -1946,13 +1669,13 @@
             "kind": "Service",
             "apiVersion": "v1",
             "metadata": {
-                "name": "myapp-rhdmcentr",
+                "name": "analytics-rhdmcentr",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
-                    "service": "myapp-rhdmcentr",
+                    "service": "analytics-rhdmcentr",
                     "template": "rhdm73-authoring"
                 },
                 "annotations": {
@@ -1981,7 +1704,7 @@
                     }
                 ],
                 "selector": {
-                    "deploymentConfig": "myapp-rhdmcentr"
+                    "deploymentConfig": "analytics-rhdmcentr"
                 },
                 "type": "ClusterIP",
                 "sessionAffinity": "None"
@@ -1998,6 +1721,7 @@
                 "creationTimestamp": null,
                 "labels": {
                     "app": "mysql-persistent",
+                    "application": "migration-analytics",
                     "template": "mysql-persistent-template"
                 },
                 "annotations": {
@@ -2027,12 +1751,12 @@
             "kind": "Service",
             "apiVersion": "v1",
             "metadata": {
-                "name": "s2i-fuse73-spring-boot-camel-drools",
+                "name": "analytics-integration",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "s2i-fuse73-spring-boot-camel-drools-http",
-                    "application": "s2i-fuse73-spring-boot-camel-drools",
-                    "service": "s2i-fuse73-spring-boot-camel-drools"
+                    "app": "analytics-integration-http",
+                    "application": "migration-analytics",
+                    "service": "analytics-integration"
                 },
                 "annotations": {
                     "description": "The web server's http port."
@@ -2048,7 +1772,7 @@
                     }
                 ],
                 "selector": {
-                    "deploymentconfig": "s2i-fuse73-spring-boot-camel-drools"
+                    "deploymentconfig": "analytics-integration"
                 },
                 "type": "ClusterIP",
                 "sessionAffinity": "None"
@@ -2061,113 +1785,16 @@
             "kind": "ImageStream",
             "apiVersion": "image.openshift.io/v1",
             "metadata": {
-                "name": "s2i-fuse73-spring-boot-camel-drools",
+                "name": "analytics-integration",
                 "generation": 1,
-                "creationTimestamp": null,
                 "labels": {
-                    "app": "s2i-fuse73-spring-boot-camel-drools",
-                    "component": "s2i-fuse73-spring-boot-camel-drools",
-                    "group": "quickstarts",
+                    "app": "analytics-integration",
+                    "application": "migration-analytics",
+                    "component": "analytics-integration",
                     "provider": "s2i",
-                    "template": "s2i-fuse73-spring-boot-camel-drools",
+                    "template": "analytics-integration",
                     "version": "1.0.0.fuse-730046-redhat-00002"
                 }
-            },
-            "spec": {
-                "lookupPolicy": {
-                    "local": false
-                },
-                "tags": [
-                    {
-                        "name": "latest",
-                        "annotations": null,
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "172.30.1.1:5000/rhdm73-authoring/s2i-fuse73-spring-boot-camel-drools:latest"
-                        },
-                        "generation": null,
-                        "importPolicy": {},
-                        "referencePolicy": {
-                            "type": ""
-                        }
-                    }
-                ]
-            },
-            "status": {
-                "dockerImageRepository": ""
-            }
-        },
-        {
-            "kind": "ImageStream",
-            "apiVersion": "image.openshift.io/v1",
-            "metadata": {
-                "name": "spring-boot-camel-amq",
-                "generation": 1,
-                "creationTimestamp": null,
-                "labels": {
-                    "app": "spring-boot-camel-amq",
-                    "group": "io.fabric8.quickstarts",
-                    "provider": "fabric8",
-                    "version": "1.0-SNAPSHOT"
-                }
-            },
-            "spec": {
-                "lookupPolicy": {
-                    "local": false
-                },
-                "tags": [
-                    {
-                        "name": "latest",
-                        "annotations": null,
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "172.30.1.1:5000/rhdm73-authoring/spring-boot-camel-amq:latest"
-                        },
-                        "generation": null,
-                        "importPolicy": {},
-                        "referencePolicy": {
-                            "type": ""
-                        }
-                    }
-                ]
-            },
-            "status": {
-                "dockerImageRepository": ""
-            }
-        },
-        {
-            "kind": "ImageStream",
-            "apiVersion": "image.openshift.io/v1",
-            "metadata": {
-                "name": "spring-boot-camel-drools",
-                "generation": 1,
-                "creationTimestamp": null,
-                "labels": {
-                    "app": "spring-boot-camel-drools",
-                    "group": "io.fabric8.quickstarts",
-                    "provider": "fabric8",
-                    "version": "1.0.0.fuse-730046-redhat-00002"
-                }
-            },
-            "spec": {
-                "lookupPolicy": {
-                    "local": false
-                },
-                "tags": [
-                    {
-                        "name": "1.0.0.fuse-730046-redhat-00002",
-                        "annotations": null,
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "172.30.1.1:5000/rhdm73-authoring/spring-boot-camel-drools:1.0.0.fuse-730046-redhat-00002"
-                        },
-                        "generation": null,
-                        "importPolicy": {},
-                        "referencePolicy": {
-                            "type": ""
-                        }
-                    }
-                ]
             },
             "status": {
                 "dockerImageRepository": ""
@@ -2177,12 +1804,12 @@
             "kind": "PersistentVolumeClaim",
             "apiVersion": "v1",
             "metadata": {
-                "name": "myapp-rhdmcentr-claim",
+                "name": "analytics-rhdmcentr-claim",
                 "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
-                    "service": "myapp-rhdmcentr",
+                    "service": "analytics-rhdmcentr",
                     "template": "rhdm73-authoring"
                 }
             },
@@ -2204,6 +1831,7 @@
                 "name": "mysql",
                 "labels": {
                     "app": "mysql-persistent",
+                    "application": "migration-analytics",
                     "template": "mysql-persistent-template"
                 }
             },
@@ -2225,8 +1853,8 @@
                 "name": "myapp-rhdmsvc",
                 "creationTimestamp": null,
                 "labels": {
-                    "app": "rhdm73-authoring",
-                    "application": "myapp",
+                    "app": "analytics",
+                    "application": "migration-analytics",
                     "rhdm": "1.0",
                     "template": "rhdm73-authoring"
                 }
@@ -2236,14 +1864,13 @@
             "kind": "BuildConfig",
             "apiVersion": "build.openshift.io/v1",
             "metadata": {
-                "name": "s2i-fuse73-spring-boot-camel-drools",
-                "creationTimestamp": null,
+                "name": "analytics-integration",
                 "labels": {
-                    "app": "s2i-fuse73-spring-boot-camel-drools",
-                    "component": "s2i-fuse73-spring-boot-camel-drools",
-                    "group": "quickstarts",
+                    "app": "analytics-integration",
+                    "application": "migration-analytics",
+                    "component": "analytics-integration",
                     "provider": "s2i",
-                    "template": "s2i-fuse73-spring-boot-camel-drools",
+                    "template": "analytics-integration",
                     "version": "1.0.0.fuse-730046-redhat-00002"
                 }
             },
@@ -2273,8 +1900,8 @@
                 "source": {
                     "type": "Git",
                     "git": {
-                        "uri": "http://gogs.gogs.svc:3000/mrizzi/sample-camel-drools.git",
-                        "ref": "decision-manager-7.3-with-persistence-amq"
+                        "uri": "https://github.com/mrizzi/sample-analytics-integration.git",
+                        "ref": "master"
                     }
                 },
                 "strategy": {
@@ -2308,7 +1935,7 @@
                 "output": {
                     "to": {
                         "kind": "ImageStreamTag",
-                        "name": "s2i-fuse73-spring-boot-camel-drools:latest"
+                        "name": "analytics-integration:latest"
                     }
                 },
                 "resources": {
@@ -2321,97 +1948,6 @@
                 },
                 "postCommit": {},
                 "nodeSelector": null,
-                "successfulBuildsHistoryLimit": 5,
-                "failedBuildsHistoryLimit": 5
-            },
-            "status": {
-                "lastVersion": 0
-            }
-        },
-        {
-            "kind": "BuildConfig",
-            "apiVersion": "build.openshift.io/v1",
-            "metadata": {
-                "name": "spring-boot-camel-amq-s2i",
-                "creationTimestamp": null,
-                "labels": {
-                    "app": "spring-boot-camel-amq",
-                    "group": "io.fabric8.quickstarts",
-                    "provider": "fabric8",
-                    "version": "1.0-SNAPSHOT"
-                }
-            },
-            "spec": {
-                "triggers": [],
-                "runPolicy": "Serial",
-                "source": {
-                    "type": "Binary",
-                    "binary": {}
-                },
-                "strategy": {
-                    "type": "Source",
-                    "sourceStrategy": {
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "fabric8/s2i-java:2.1"
-                        }
-                    }
-                },
-                "output": {
-                    "to": {
-                        "kind": "ImageStreamTag",
-                        "name": "spring-boot-camel-amq:latest"
-                    }
-                },
-                "resources": {},
-                "postCommit": {},
-                "nodeSelector": {},
-                "successfulBuildsHistoryLimit": 5,
-                "failedBuildsHistoryLimit": 5
-            },
-            "status": {
-                "lastVersion": 0
-            }
-        },
-        {
-            "kind": "BuildConfig",
-            "apiVersion": "build.openshift.io/v1",
-            "metadata": {
-                "name": "spring-boot-camel-drools-s2i",
-                "creationTimestamp": null,
-                "labels": {
-                    "app": "spring-boot-camel-drools",
-                    "group": "io.fabric8.quickstarts",
-                    "provider": "fabric8",
-                    "version": "1.0.0.fuse-730046-redhat-00002"
-                }
-            },
-            "spec": {
-                "triggers": [],
-                "runPolicy": "Serial",
-                "source": {
-                    "type": "Binary",
-                    "binary": {}
-                },
-                "strategy": {
-                    "type": "Source",
-                    "sourceStrategy": {
-                        "from": {
-                            "kind": "ImageStreamTag",
-                            "namespace": "openshift",
-                            "name": "fuse7-java-openshift:1.3"
-                        }
-                    }
-                },
-                "output": {
-                    "to": {
-                        "kind": "ImageStreamTag",
-                        "name": "spring-boot-camel-drools:1.0.0.fuse-730046-redhat-00002"
-                    }
-                },
-                "resources": {},
-                "postCommit": {},
-                "nodeSelector": {},
                 "successfulBuildsHistoryLimit": 5,
                 "failedBuildsHistoryLimit": 5
             },

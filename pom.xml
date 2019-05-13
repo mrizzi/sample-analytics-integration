@@ -19,12 +19,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.fabric8.quickstarts</groupId>
-    <artifactId>spring-boot-camel-drools</artifactId>
-    <version>1.0.0.fuse-730046-redhat-00002</version>
+    <groupId>org.jboss.xavier</groupId>
+    <artifactId>sample-analyics-integration</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 
-    <name>Fabric8 :: Quickstarts :: Spring Boot :: Camel and Drools</name>
-    <description>Spring Boot example running a Camel route using a rules engine</description>
+    <name>Sample Analytics Integration</name>
+    <description>Fuse (on Spring Boot) to create a prototype to integrate JPA (with external DB), JMA (AMQ Broker), Drools (remote invocation), Rest APIs, Swagger</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

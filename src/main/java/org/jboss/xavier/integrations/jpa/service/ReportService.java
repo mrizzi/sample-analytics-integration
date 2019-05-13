@@ -1,7 +1,7 @@
-package io.fabric8.quickstarts.camel.drools.jpa.service;
+package org.jboss.xavier.integrations.jpa.service;
 
-import io.fabric8.quickstarts.camel.drools.jpa.repository.ReportRepository;
-import io.fabric8.quickstarts.camel.drools.model.migrationanalytics.output.ReportDataModel;
+import org.jboss.xavier.integrations.jpa.repository.ReportRepository;
+import org.jboss.xavier.integrations.migrationanalytics.output.ReportDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

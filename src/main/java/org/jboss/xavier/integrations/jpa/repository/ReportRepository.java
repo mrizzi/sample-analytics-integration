@@ -1,6 +1,6 @@
-package io.fabric8.quickstarts.camel.drools.jpa.repository;
+package org.jboss.xavier.integrations.jpa.repository;
 
-import io.fabric8.quickstarts.camel.drools.model.migrationanalytics.output.ReportDataModel;
+import org.jboss.xavier.integrations.migrationanalytics.output.ReportDataModel;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface ReportRepository extends PagingAndSortingRepository<ReportDataModel, Long> 

@@ -13,20 +13,17 @@
  *  implied.  See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-package io.fabric8.quickstarts.camel.drools;
+package org.jboss.xavier.integrations;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import io.fabric8.quickstarts.camel.drools.model.Greeting;
-import io.fabric8.quickstarts.camel.drools.model.migrationanalytics.input.InputDataModel;
-import io.fabric8.quickstarts.camel.drools.model.Person;
+import org.jboss.xavier.integrations.migrationanalytics.input.InputDataModel;
 
-import io.fabric8.quickstarts.camel.drools.model.migrationanalytics.output.ReportDataModel;
+import org.jboss.xavier.integrations.migrationanalytics.output.ReportDataModel;
 import org.kie.api.KieServices;
 import org.kie.api.command.BatchExecutionCommand;
 import org.kie.api.command.Command;
@@ -40,27 +37,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class DecisionServerHelper {
 
-    private static final String[] NAMES = {"Seamus", "George", "Lorraine", "Marty", "Dave", "Linda"};
-
     /** The random. */
     private final Random random = new Random();
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-
-    public BatchExecutionCommand createRandomCommand() {
-        Person person = new Person();
-        String name = NAMES[random.nextInt(NAMES.length)];
-        person.setName(name);
-
-        List<Command<?>> cmds = new ArrayList<Command<?>>();
-        KieCommands commands = KieServices.Factory.get().getCommands();
-        cmds.add(commands.newInsert(person));
-        cmds.add(commands.newFireAllRules());
-        cmds.add(commands.newQuery("greetings", "get greeting"));
-        BatchExecutionCommand command = commands.newBatchExecution(cmds, "HelloRulesSession");
-        return command;
-    }
 
     public BatchExecutionCommand createRandomMigrationAnalyticsCommand() {
         return createRandomMigrationAnalyticsCommand(createSampleInputDataModel());
@@ -89,20 +69,6 @@ public class DecisionServerHelper {
         cmds.add(commands.newFireAllRules());
         cmds.add(commands.newQuery("output", retrieveQueryId));
         return commands.newBatchExecution(cmds, kiseSessionId);
-    }
-
-    public Greeting extractResult(KieServiceResponse<ExecutionResults> response) {
-        ExecutionResults res = response.getResult();
-        Greeting greeting = null;
-        if (res != null) {
-            QueryResults queryResults = (QueryResults) res.getValue("greetings");
-            for (QueryResultsRow queryResult : queryResults) {
-                greeting = (Greeting) queryResult.get("greeting");
-                break;
-            }
-        }
-
-        return greeting;
     }
 
     public ReportDataModel extractReports(KieServiceResponse<ExecutionResults> response) {
