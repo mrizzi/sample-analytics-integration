@@ -15,4 +15,9 @@ public class ReportService
     {
         return reportRepository.findAll();
     }
+
+    public ReportDataModel findReportDetails(Long id)
+    {
+        return reportRepository.findOne(id);
+    }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
                         http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://camel.apache.org/schema/spring
                         http://camel.apache.org/schema/spring/camel-spring.xsd">
@@ -30,6 +30,12 @@
                 <description>Get the list of all the reports</description>
                 <route id="reports-get-all">
                     <bean beanType="org.jboss.xavier.integrations.jpa.service.ReportService" method="findReports" />
+                </route>
+            </get>
+            <get uri="/{id}">
+                <description>Get the details of a report</description>
+                <route id="reports-get-details">
+                    <bean beanType="org.jboss.xavier.integrations.jpa.service.ReportService" method="findReportDetails(${header.id})" />
                 </route>
             </get>
         </rest>
