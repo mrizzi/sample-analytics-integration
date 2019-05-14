@@ -7,11 +7,14 @@ Fuse (on Spring Boot) to create a prototype to integrate JPA (with external DB),
 1. `oc login -u system:admin`
 1. `oc project openshift`
 
-## Red Hat Decision Manager
-Instructions from https://access.redhat.com/documentation/en-us/red_hat_decision_manager/7.3/html-single/deploying_a_red_hat_decision_manager_authoring_or_managed_server_environment_on_red_hat_openshift_container_platform/index#dm-openshift-prepare-con and https://access.redhat.com/RegistryAuthentication#registry-service-accounts-for-shared-environments-4
-1. `oc create -f <secret>.yaml`
+## Red Hat Registry Service Account
+1. Set up and download an Openshift registry service account following the instructions from https://access.redhat.com/RegistryAuthentication#registry-service-accounts-for-shared-environments-4
+1. `oc create -f <secret>.yaml` (`<secret>` is the name of the downloaded Openshift registry service account)
 1. `oc secrets link default <secret> --for=pull`
 1. `oc secrets link builder <secret> --for=pull`
+
+## Red Hat Decision Manager
+Instructions from https://access.redhat.com/documentation/en-us/red_hat_decision_manager/7.3/html-single/deploying_a_red_hat_decision_manager_authoring_or_managed_server_environment_on_red_hat_openshift_container_platform/index#dm-openshift-prepare-con
 1. Download from https://access.redhat.com/jbossnetwork/restricted/listSoftware.html?downloadType=distributions&product=rhdm&productChanged=yes and unzip
 1. `oc create -f ./Downloads/rhdm-7.3-openshift-templates/rhdm73-image-streams.yaml`
 1. `oc import-image rhdm73-decisioncentral-openshift:1.0`
@@ -29,7 +32,7 @@ Instructions from https://access.redhat.com/documentation/en-us/red_hat_fuse/7.3
 1. `oc create -n openshift -f ${BASEURL}/fis-image-streams.json`
 1. `for template in eap-camel-amq-template.json  eap-camel-cdi-template.json  eap-camel-cxf-jaxrs-template.json  eap-camel-cxf-jaxws-template.json  eap-camel-jpa-template.json  karaf-camel-amq-template.json  karaf-camel-log-template.json  karaf-camel-rest-sql-template.json  karaf-cxf-rest-template.json  spring-boot-camel-amq-template.json  spring-boot-camel-config-template.json  spring-boot-camel-drools-template.json  spring-boot-camel-infinispan-template.json  spring-boot-camel-rest-sql-template.json  spring-boot-camel-teiid-template.json  spring-boot-camel-template.json  spring-boot-camel-xa-template.json  spring-boot-camel-xml-template.json  spring-boot-cxf-jaxrs-template.json  spring-boot-cxf-jaxws-template.json ;  do  oc create -n openshift -f  https://raw.githubusercontent.com/jboss-fuse/application-templates/application-templates-2.1.fuse-730065-redhat-00002/quickstarts/${template};  done`
 
-# Deploy
+# Deployment
 
 ## OCP templates
 1. `oc login -u developer`
