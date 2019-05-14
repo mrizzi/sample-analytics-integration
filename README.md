@@ -34,7 +34,7 @@ Instructions from https://access.redhat.com/documentation/en-us/red_hat_fuse/7.3
 1. `oc secrets link default <secret> --for=pull`
 1. `oc secrets link builder <secret> --for=pull`
 
-#Deploy
+# Deploy
 
 ## OCP templates
 1. `for template in eap7-app-secret.json mysql-secret.json analytics_template.json;  do  oc process -f https://raw.githubusercontent.com/mrizzi/sample-analytics-integration/master/src/main/resources/okd/${template}| oc create -f -;  done`
@@ -49,7 +49,7 @@ Instructions from https://access.redhat.com/documentation/en-us/red_hat_fuse/7.3
 1. once the import has finished, click the `Build & Install` button from the upper right `Build` menu
 1. once the build has been successfully done, click on the `Deploy` button
 
-#Manage
+# Manage
 
 ## MySql
 1. from pod's `Terminal` tab execute `mysql --user userAJL --password sampledb` (pwd: `oRk1CWV21JttTtxP`) 
