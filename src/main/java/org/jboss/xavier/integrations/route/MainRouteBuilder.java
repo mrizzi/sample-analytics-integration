@@ -145,7 +145,7 @@ public class MainRouteBuilder extends RouteBuilder {
                                                                     .totalDiskSpace(Long.parseLong(exchange.getMessage().getHeader("totaldiskspace").toString()))
                                                                     .build()))
                 .log("Before third unmarshal : ${body}")
-                .marshal().json()
+//                .marshal().json()
                 .to("jms:queue:inputDataModel");
     }
 
