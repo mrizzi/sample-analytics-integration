@@ -16,7 +16,11 @@
         <property name="connectionFactory" ref="artemisConnectionFactory"/>
     </bean>
 
+    <bean id="integration-component-builder" class="org.jboss.xavier.integrations.route.MainRouteBuilder" />
+
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+
+        <routeBuilder ref="integration-component-builder" />
 
         <restConfiguration contextPath="/camel-rest-jpa" apiContextPath="/api-doc" apiContextRouteId="doc-api" component="servlet" bindingMode="json">
             <apiProperty key="api.title" value="Migration Analytics REST API"/>
