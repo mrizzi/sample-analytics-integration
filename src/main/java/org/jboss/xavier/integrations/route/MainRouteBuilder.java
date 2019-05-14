@@ -41,8 +41,7 @@ public class MainRouteBuilder extends RouteBuilder {
 
         restConfiguration()
                 .component("servlet")
-                .contextPath("/")
-                .port(8090);
+                .contextPath("/");
 
         rest()
                 .post("/upload")
@@ -145,7 +144,7 @@ public class MainRouteBuilder extends RouteBuilder {
                                                                     .build()))
                 .log("Before third unmarshal : ${body}")
                 .marshal().json()
-                .to("mock:amq_endpoint");
+                .to("jms:queue:inputDataModel");
     }
 
     private String getRHInsightsRequestId() {
