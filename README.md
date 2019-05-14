@@ -28,15 +28,15 @@ Instructions from https://access.redhat.com/documentation/en-us/red_hat_fuse/7.3
 1. `BASEURL=https://raw.githubusercontent.com/jboss-fuse/application-templates/application-templates-2.1.fuse-730065-redhat-00002`
 1. `oc create -n openshift -f ${BASEURL}/fis-image-streams.json`
 1. `for template in eap-camel-amq-template.json  eap-camel-cdi-template.json  eap-camel-cxf-jaxrs-template.json  eap-camel-cxf-jaxws-template.json  eap-camel-jpa-template.json  karaf-camel-amq-template.json  karaf-camel-log-template.json  karaf-camel-rest-sql-template.json  karaf-cxf-rest-template.json  spring-boot-camel-amq-template.json  spring-boot-camel-config-template.json  spring-boot-camel-drools-template.json  spring-boot-camel-infinispan-template.json  spring-boot-camel-rest-sql-template.json  spring-boot-camel-teiid-template.json  spring-boot-camel-template.json  spring-boot-camel-xa-template.json  spring-boot-camel-xml-template.json  spring-boot-cxf-jaxrs-template.json  spring-boot-cxf-jaxws-template.json ;  do  oc create -n openshift -f  https://raw.githubusercontent.com/jboss-fuse/application-templates/application-templates-2.1.fuse-730065-redhat-00002/quickstarts/${template};  done`
+
+# Deploy
+
+## OCP templates
 1. `oc login -u developer`
 1. `oc new-project migration-analytics`
 1. `oc create -f <secret>.yaml`
 1. `oc secrets link default <secret> --for=pull`
 1. `oc secrets link builder <secret> --for=pull`
-
-# Deploy
-
-## OCP templates
 1. `for template in eap7-app-secret.json mysql-secret.json analytics_template.json;  do  oc process -f https://raw.githubusercontent.com/mrizzi/sample-analytics-integration/master/src/main/resources/okd/${template}| oc create -f -;  done`
 
 ## Decision Manager
