@@ -39,9 +39,11 @@ public class MainRouteBuilder extends RouteBuilder {
     public void configure() {
         getContext().setTracing(true);
 
+/*
         restConfiguration()
                 .component("servlet")
                 .contextPath("/");
+*/
 
         rest()
                 .post("/upload")
@@ -49,8 +51,8 @@ public class MainRouteBuilder extends RouteBuilder {
                     .consumes("multipart/form-data")
                     .produces("")
                     .to("direct:upload")
-                .get("/health")
-                    .to("direct:health");
+/*                .get("/health")
+                    .to("direct:health")*/;
 
         from("direct:upload")
                 .unmarshal(new CustomizedMultipartDataFormat())
