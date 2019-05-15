@@ -148,7 +148,7 @@ public class MainRouteBuilder extends RouteBuilder {
                     InputDataModel inputDataModel = new InputDataModel();
                     inputDataModel.setCustomerId("CID9876");
                     inputDataModel.setFileName("hardcoded-vcenter.v2v.bos.redhat.com.json");
-                    inputDataModel.setNumberOfHosts(Integer.parseInt((exchange.getMessage().getHeader("numberofhosts").toString()));
+                    inputDataModel.setNumberOfHosts(Integer.parseInt((exchange.getMessage().getHeader("numberofhosts").toString())));
                     inputDataModel.setTotalDiskSpace(Long.parseLong(exchange.getMessage().getHeader("totaldiskspace").toString()));
                     exchange.getMessage().setBody(inputDataModel);
                 })
