@@ -14,8 +14,8 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.jboss.xavier.integrations.migrationanalytics.input.InputDataModel;
 import org.jboss.xavier.integrations.route.dataformat.CustomizedMultipartDataFormat;
-import org.jboss.xavier.integrations.route.model.InputDataModel;
 import org.jboss.xavier.integrations.route.model.RHIdentity;
 import org.jboss.xavier.integrations.route.model.cloudforms.CloudFormAnalysis;
 import org.jboss.xavier.integrations.route.model.notification.FilePersistedNotification;
@@ -143,11 +143,15 @@ public class MainRouteBuilder extends RouteBuilder {
                     exchange.getMessage().setHeader("totaldiskspace", String.valueOf(totalspace));
                 })
                 .log("Before second unmarshal : ${body}")
-                .process(exchange -> exchange.getMessage().setBody(InputDataModel.builder().customerId("CID9876") //exchange.getMessage().getHeader("customerid").toString())
-                                                                    .filename("hardcoded-vcenter.v2v.bos.redhat.com.json")
-                                                                    .numberOfHosts(Long.parseLong(exchange.getMessage().getHeader("numberofhosts").toString()))
-                                                                    .totalDiskSpace(Long.parseLong(exchange.getMessage().getHeader("totaldiskspace").toString()))
-                                                                    .build()))
+                .process(exchange ->
+                {
+                    InputDataModel inputDataModel = new InputDataModel();
+                    inputDataModel.setCustomerId("CID9876");
+                    inputDataModel.setFileName("hardcoded-vcenter.v2v.bos.redhat.com.json");
+                    inputDataModel.setNumberOfHosts(Integer.parseInt((exchange.getMessage().getHeader("numberofhosts").toString()));
+                    inputDataModel.setTotalDiskSpace(Long.parseLong(exchange.getMessage().getHeader("totaldiskspace").toString()));
+                    exchange.getMessage().setBody(inputDataModel);
+                })
                 .log("Before third unmarshal : ${body}")
 //                .marshal().json()
                 .to("jms:queue:inputDataModel");
