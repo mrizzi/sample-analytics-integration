@@ -117,9 +117,11 @@ public class MainRouteBuilder extends RouteBuilder {
 
 
         from("direct:download-from-S3")
-                .setHeader("remote_url", simple("http4://${body.url.replaceAll('http://', '')}"))
+//                .setHeader("remote_url", simple("http4://${body.url.replaceAll('http://', '')}"))
+                .setHeader("Exchange.HTTP_URI", simple("${body.ur}"))
                 .setBody(constant(""))
-                .recipientList(simple("${header.remote_url}"))
+//                .recipientList(simple("${header.remote_url}"))
+                .to("http4://oldhost")
                 .convertBodyTo(String.class)
                 .log("Contenido : ${body}")
                 .to("direct:parse");
