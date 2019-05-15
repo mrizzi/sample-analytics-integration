@@ -122,6 +122,7 @@ public class MainRouteBuilder extends RouteBuilder {
                 .setBody(constant(""))
 //                .recipientList(simple("${header.remote_url}"))
                 .to("http4://oldhost")
+                .removeHeader("Exchange.HTTP_URI")
                 .convertBodyTo(String.class)
                 .log("Contenido : ${body}")
                 .to("direct:parse");
