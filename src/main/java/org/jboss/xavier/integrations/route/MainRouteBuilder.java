@@ -51,7 +51,7 @@ public class MainRouteBuilder extends RouteBuilder {
 */
 
         rest()
-                .post("/upload")
+                .post("/upload/{customerID}")
                     .id("uploadAction")
                     .bindingMode(RestBindingMode.off)
                     .consumes("multipart/form-data")
