@@ -99,7 +99,7 @@ public class MainRouteBuilder extends RouteBuilder {
         .log("answer ${body}")
         .end();
 
-        from("kafka:192.168.1.44:29092?topic=platform.upload.testareno&autoOffsetReset=earliest&consumersCount=1&brokers=192.168.1.44:29092")
+        from("kafka:kafka:29092?topic=platform.upload.testareno&autoOffsetReset=earliest&consumersCount=1&brokers=kafka:29092")
                 .process(exchange -> {
                     String messageKey = "";
                     if (exchange.getIn() != null) {
