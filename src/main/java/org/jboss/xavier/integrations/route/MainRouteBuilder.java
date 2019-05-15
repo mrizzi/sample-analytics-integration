@@ -144,7 +144,7 @@ public class MainRouteBuilder extends RouteBuilder {
                 })
                 .log("Before second unmarshal : ${body}")
                 .process(exchange -> exchange.getMessage().setBody(InputDataModel.builder().customerId("CID9876") //exchange.getMessage().getHeader("customerid").toString())
-                                                                    .filename(exchange.getMessage().getHeader("CamelFileName").toString())
+                                                                    .filename("hardcoded-vcenter.v2v.bos.redhat.com.json")
                                                                     .numberOfHosts(Long.parseLong(exchange.getMessage().getHeader("numberofhosts").toString()))
                                                                     .totalDiskSpace(Long.parseLong(exchange.getMessage().getHeader("totaldiskspace").toString()))
                                                                     .build()))
