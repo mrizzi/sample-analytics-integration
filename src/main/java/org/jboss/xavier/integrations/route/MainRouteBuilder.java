@@ -9,6 +9,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.kafka.KafkaConstants;
 import org.apache.camel.dataformat.zipfile.ZipSplitter;
 import org.apache.camel.model.dataformat.JsonLibrary;
+import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -48,6 +49,7 @@ public class MainRouteBuilder extends RouteBuilder {
         rest()
                 .post("/upload")
                     .id("uploadAction")
+                    .bindingMode(RestBindingMode.off)
                     .consumes("multipart/form-data")
                     .produces("")
                     .to("direct:upload")
@@ -140,7 +142,7 @@ public class MainRouteBuilder extends RouteBuilder {
                 })
                 .log("Before second unmarshal : ${body}")
                 .process(exchange -> exchange.getMessage().setBody(InputDataModel.builder().customerId("CID9876") //exchange.getMessage().getHeader("customerid").toString())
-                                                                    .filename(simple("${header.CamelFileName}").getText())
+                                                                    .filename(exchange.getMessage().getHeader("CamelFileName").toString())
                                                                     .numberOfHosts(Long.parseLong(exchange.getMessage().getHeader("numberofhosts").toString()))
                                                                     .totalDiskSpace(Long.parseLong(exchange.getMessage().getHeader("totaldiskspace").toString()))
                                                                     .build()))
