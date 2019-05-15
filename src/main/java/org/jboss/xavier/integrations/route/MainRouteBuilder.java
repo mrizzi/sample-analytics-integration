@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.activation.DataHandler;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -36,6 +38,8 @@ public class MainRouteBuilder extends RouteBuilder {
 
     @Value("${insights.kafka.host}")
     private String kafkaHost;
+
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
     public void configure() {
         getContext().setTracing(true);
@@ -148,7 +152,7 @@ public class MainRouteBuilder extends RouteBuilder {
                 {
                     InputDataModel inputDataModel = new InputDataModel();
                     inputDataModel.setCustomerId("CID9876");
-                    inputDataModel.setFileName("hardcoded-vcenter.v2v.bos.redhat.com.json");
+                    inputDataModel.setFileName(format.format(new Date()) + "-" + "vcenter.v2v.bos.redhat.com.json");
                     inputDataModel.setNumberOfHosts(Integer.parseInt((exchange.getMessage().getHeader("numberofhosts").toString())));
                     inputDataModel.setTotalDiskSpace(Long.parseLong(exchange.getMessage().getHeader("totaldiskspace").toString()));
                     exchange.getMessage().setBody(inputDataModel);
