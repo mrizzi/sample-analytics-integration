@@ -117,7 +117,7 @@ public class MainRouteBuilder extends RouteBuilder {
 
 
         from("direct:download-from-S3")
-                .setHeader("remote_url", simple("http4://${body.url.replaceAll('http://minio', '192.168.1.44')}"))
+                .setHeader("remote_url", simple("http4://${body.url.replaceAll('http://', '')}"))
                 .setBody(constant(""))
                 .recipientList(simple("${header.remote_url}"))
                 .convertBodyTo(String.class)
