@@ -39,7 +39,7 @@ public class MainRouteBuilder extends RouteBuilder {
     @Value("${insights.kafka.host}")
     private String kafkaHost;
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 
     public void configure() {
         getContext().setTracing(true);
