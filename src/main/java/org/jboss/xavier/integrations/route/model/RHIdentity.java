@@ -1,22 +1,19 @@
 package org.jboss.xavier.integrations.route.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Base64;
+import java.util.Map;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RHIdentity {
-    String accountNumber;
-    String internalOrgId;
+    String account_number;
+    Map<String,String> internal;
 
-    public String toHash() {
-        return Base64.getEncoder().encodeToString(getJSON().getBytes());
-    }
 
-    private String getJSON() {
-        // '{"identity": {"account_number": "12345", "internal": {"org_id": "54321"}}}'
-        return String.format("{\"identity\": {\"account_number\": \"%s\", \"internal\": {\"org_id\": \"%s\"}}}", accountNumber, internalOrgId);
-    }
 }
