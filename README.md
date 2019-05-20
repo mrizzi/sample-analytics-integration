@@ -44,7 +44,7 @@ Instructions from https://access.redhat.com/documentation/en-us/red_hat_fuse/7.3
 
 ## Decision Manager
 1. go to Application -> Routes page and click on the URL in the `Hostname` column beside the `myapp-rhdmcentr` service
-1. login with `adminUser`-`password`
+1. login with `adminUser`-`SxNhwF2!`
 1. click on `Design` link
 1. click on `Import Project` button
 1. in the `Repository URL` field paste `https://github.com/mrizzi/sample-analytics.git`
