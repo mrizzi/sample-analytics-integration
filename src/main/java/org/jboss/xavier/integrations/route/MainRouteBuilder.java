@@ -45,6 +45,15 @@ public class MainRouteBuilder extends RouteBuilder {
     private String kafkaHost;
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+    
+    @Value("${insights.upload.mimetype}")
+    private String mimeType;
+    
+    @Value("${insights.upload.accountnumber}")
+    private String accountNumber;
+    
+    @Value("${insights.upload.origin}")
+    private String origin;
 
     public void configure() {
         getContext().setTracing(true);
@@ -70,12 +79,10 @@ public class MainRouteBuilder extends RouteBuilder {
                 .split()
                     .attachments()
                     .process(processMultipart())
-                    .log("Processing PART ------> ${date:now:HH:mm:ss.SSS} [${header.CamelFileName}] // [${header.part_contenttype}] // [${header.part_name}]]")
                     .choice()
                         .when(isZippedFile())
                             .split(new ZipSplitter())
                             .streaming()
-                            .log(".....ZIP File processed : ${header.CamelFileName}")
                             .to("direct:store")
                         .endChoice()
                         .otherwise()
@@ -95,7 +102,7 @@ public class MainRouteBuilder extends RouteBuilder {
                     exchange.getIn().setHeader(Exchange.FILE_NAME, filename);
 
                     String file = exchange.getIn().getBody(String.class);
-                    multipartEntityBuilder.addPart("upload", new ByteArrayBody(file.getBytes(), ContentType.create("application/vnd.redhat.testareno.something+json"), filename));
+                    multipartEntityBuilder.addPart("upload", new ByteArrayBody(file.getBytes(), ContentType.create(mimeType), filename));
                     exchange.getIn().setBody(multipartEntityBuilder.build());
                 })
                 .setHeader(Exchange.HTTP_METHOD, constant(org.apache.camel.component.http4.HttpMethods.POST))
@@ -105,7 +112,7 @@ public class MainRouteBuilder extends RouteBuilder {
                 .to("http4://" + uploadHost + "/api/ingress/v1/upload")
                 .end();
 
-        from("kafka:kafka:29092?topic=platform.upload.testareno&brokers=kafka:29092&autoCommitEnable=true")
+        from("kafka:" + kafkaHost + "?topic=platform.upload.testareno&brokers=" + kafkaHost + "&autoOffsetReset=latest&autoCommitEnable=true")
                 .process(exchange -> {
                     String messageKey = "";
                     if (exchange.getIn() != null) {
@@ -127,7 +134,6 @@ public class MainRouteBuilder extends RouteBuilder {
 
 
         from("direct:download-from-S3")
-//                .setHeader("remote_url", simple("http4://${body.url.replaceAll('http://', '')}"))
                 .setHeader("Exchange.HTTP_URI", simple("${body.url}"))
                 .process( exchange -> {
                     FilePersistedNotification notif_body = exchange.getIn().getBody(FilePersistedNotification.class);
@@ -135,14 +141,13 @@ public class MainRouteBuilder extends RouteBuilder {
                     RHIdentity rhIdentity = new ObjectMapper().reader().forType(RHIdentity.class).withRootName("identity").readValue(identity_json);
                     exchange.getIn().setHeader("customerid", rhIdentity.getInternal().get("customerid"));
                     exchange.getIn().setHeader("filename", rhIdentity.getInternal().get("filename"));
-                    exchange.getIn().setHeader("remote_url", exchange.getIn().getHeader("remote_url"));
+                    exchange.getIn().setHeader("origin", exchange.getIn().getHeader("origin"));
                 })
+                .filter().method(MainRouteBuilder.class, "filterMessages")
                 .setBody(constant(""))
-//                .recipientList(simple("${header.remote_url}"))
                 .to("http4://oldhost")
                 .removeHeader("Exchange.HTTP_URI")
                 .convertBodyTo(String.class)
-                .log("Content : ${body}")
                 .to("direct:parse");
 
         from("direct:parse")
@@ -165,7 +170,7 @@ public class MainRouteBuilder extends RouteBuilder {
                 {
                     InputDataModel inputDataModel = new InputDataModel();
                     inputDataModel.setCustomerId(exchange.getIn().getHeader("customerid").toString());
-                    inputDataModel.setFileName(format.format(new Date()) + "-" + exchange.getIn().getHeader("filename").toString());
+                    inputDataModel.setFileName(getFilename(exchange.getIn().getHeader("filename").toString()));
                     inputDataModel.setNumberOfHosts(Integer.parseInt((exchange.getMessage().getHeader("numberofhosts").toString())));
                     inputDataModel.setTotalDiskSpace(Long.parseLong(exchange.getMessage().getHeader("totaldiskspace").toString()));
                     exchange.getMessage().setBody(inputDataModel);
@@ -173,6 +178,15 @@ public class MainRouteBuilder extends RouteBuilder {
                 .log("Message to send to AMQ : ${body}")
 //                .marshal().json()
                 .to("jms:queue:inputDataModel");
+    }
+
+    private String getFilename(String filename) {
+        return format.format(new Date()) + "-" + filename;
+    }
+
+    public boolean filterMessages(Exchange exchange) {
+        String originHeader = exchange.getIn().getHeader("origin", String.class);
+        return (originHeader != null && originHeader.equalsIgnoreCase(origin));
     }
 
     private String getRHInsightsRequestId() {
@@ -185,11 +199,11 @@ public class MainRouteBuilder extends RouteBuilder {
         Map<String,String> internal = new HashMap<>();
         internal.put("customerid", customerid);
         internal.put("filename", filename);
-        internal.put("org_id", "543221");
+        internal.put("origin", origin);
         String rhIdentity_json = "";
         try {
             rhIdentity_json = new ObjectMapper().writer().withRootName("identity").writeValueAsString(RHIdentity.builder()
-                    .account_number("12345")
+                    .account_number(accountNumber)
                     .internal(internal)
                     .build());
         } catch (JsonProcessingException e) {
