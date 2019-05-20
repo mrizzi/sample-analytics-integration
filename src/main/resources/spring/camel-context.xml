@@ -32,6 +32,7 @@
             <description>Report REST API</description>
             <get uri="/">
                 <description>Get the list of all the reports</description>
+                <param name="summary" type="query" defaultValue="true" required="false" description="Disable the output objects to have only the fields needed in the reports summary page setting the parameter 'summary=false'" />
                 <route id="reports-get-all">
                     <choice>
                         <when>
