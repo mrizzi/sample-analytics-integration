@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                         http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/data/jpa
+                        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
                         http://camel.apache.org/schema/spring
                         http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <jpa:repositories base-package="org.jboss.xavier.integrations.jpa" />
 
     <!-- setup ActiveMQ Artemis connection factory -->
     <bean id="artemisConnectionFactory" class="org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory">
@@ -29,7 +33,15 @@
             <get uri="/">
                 <description>Get the list of all the reports</description>
                 <route id="reports-get-all">
-                    <bean beanType="org.jboss.xavier.integrations.jpa.service.ReportService" method="findReports" />
+                    <choice>
+                        <when>
+                            <simple>${header.summary} == 'false'</simple>
+                            <bean beanType="org.jboss.xavier.integrations.jpa.service.ReportService" method="findReports" />
+                        </when>
+                        <otherwise>
+                            <bean beanType="org.jboss.xavier.integrations.jpa.service.ReportService" method="findReportSummary" />
+                        </otherwise>
+                    </choice>
                 </route>
             </get>
             <get uri="/{id}">
