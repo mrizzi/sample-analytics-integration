@@ -186,6 +186,7 @@ public class MainRouteBuilder extends RouteBuilder {
 
     public boolean filterMessages(Exchange exchange) {
         String originHeader = exchange.getIn().getHeader("origin", String.class);
+        System.out.println("Origin header : " + originHeader + " env var : " + origin);
         return (originHeader != null && originHeader.equalsIgnoreCase(origin));
     }
 
