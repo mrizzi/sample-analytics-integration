@@ -141,7 +141,7 @@ public class MainRouteBuilder extends RouteBuilder {
                     RHIdentity rhIdentity = new ObjectMapper().reader().forType(RHIdentity.class).withRootName("identity").readValue(identity_json);
                     exchange.getIn().setHeader("customerid", rhIdentity.getInternal().get("customerid"));
                     exchange.getIn().setHeader("filename", rhIdentity.getInternal().get("filename"));
-                    exchange.getIn().setHeader("origin", exchange.getIn().getHeader("origin"));
+                    exchange.getIn().setHeader("origin", rhIdentity.getInternal().get("origin"));
                 })
                 .filter().method(MainRouteBuilder.class, "filterMessages")
                 .setBody(constant(""))
