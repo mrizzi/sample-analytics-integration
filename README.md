@@ -54,8 +54,10 @@ Instructions from https://access.redhat.com/documentation/en-us/red_hat_fuse/7.3
 
 # Manage
 
-## MySQL
-1. To login to MySQL in pod's `Terminal` tab execute `mysql -u userAJL -poRk1CWV21JttTtxP sampledb`
+## PostgreSQL
+1. Go to Resources -> Secrets page and select `postgresql` secret for the list of the secrets
+1. Select `Reveal Secret` link to get the `database-name` value
+1. Go to PostgreSQL pod's `Terminal` tab to log in doing `psql <database-name>`
 1. To get the report entries persisted execute `select * from report_data_model;`
 1. To DELETE ALL the report entries execute `truncate table report_data_model;`
 ## AMQ Broker
